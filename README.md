@@ -21,16 +21,16 @@ The main repo is dead since 6 month and i need to use this package
 
 ## Installation :package:
 
-Install the @retconned/kick-js package using the following command:
+Install the @realspinelle/kick-js package using the following command:
 
 ```sh
-npm install @retconned/kick-js
+npm install @realspinelle/kick-js
 ```
 
 ## Example code :computer:
 
 ```ts
-import { createClient } from "@retconned/kick-js";
+import { createClient } from "@realspinelle/kick-js";
 import "dotenv/config";
 
 const client = createClient("xqc", { logger: true, readOnly: true });
@@ -80,4 +80,4 @@ const polls = await client.getPolls();
 
 ## Disclaimer :warning:
 
-@retconned/kick-js is not affiliated with or endorsed by [Kick.com](https://kick.com). It is an independent tool created to facilitate making moderation bots & other chat-related applications.
+@retconned/kick-js / @realspinelle/kick-js is not affiliated with or endorsed by [Kick.com](https://kick.com). It is an independent tool created to facilitate making moderation bots & other chat-related applications.

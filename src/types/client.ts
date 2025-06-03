@@ -45,6 +45,8 @@ export interface KickClient {
   slowMode: (mode: "on" | "off", durationInSeconds?: number) => Promise<void>;
   getPoll: (targetChannel?: string) => Promise<Poll | null>;
   getLeaderboards: (targetChannel?: string) => Promise<Leaderboard | null>;
+  getLiveData: () => Promise<VideosData | null>;
+  getCurrentViewers: () => Promise<number>;
 }
 
 export interface AuthenticationSettings {
@@ -103,4 +105,49 @@ export type Gift = {
   user_id: number;
   username: string;
   quantity: number;
+};
+
+export type CurrentViewers = {
+  livestream_id: number;
+  viewers: number;
+}
+
+export type VideosData = {
+  id: number;
+  slug: string;
+  channel_id: number;
+  created_at: string;
+  session_title: string;
+  is_live: boolean;
+  risk_level_id: number | null;
+  start_time: string;
+  source: string;
+  twitch_channel: string | null;
+  duration: number;
+  language: string;
+  is_mature: boolean;
+  viewer_count: number;
+  tags: string[];
+  thumbnail: {
+    src: string;
+    srcset: string;
+  };
+  views: number;
+  video: {
+    id: number;
+    live_stream_id: number;
+    slug: string | null;
+    thumb: string | null;
+    s3: string | null;
+    trading_platform_id: number | null;
+    created_at: string;
+    updated_at: string;
+    uuid: string;
+    views: number;
+    deleted_at: string | null;
+    is_pruned: boolean;
+    is_private: boolean;
+    status: string;
+  };
+  categories: any[];
 };

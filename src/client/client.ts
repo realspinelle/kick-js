@@ -8,10 +8,11 @@ import type { VideoInfo } from "../types/video";
 import type {
   KickClient,
   ClientOptions,
-  AuthenticationSettings,
   Poll,
   Leaderboard,
   LoginOptions,
+  VideosData,
+  CurrentViewers,
 } from "../types/client";
 import type { MessageData } from "../types/events";
 import { validateCredentials } from "../utils/utils";
@@ -211,10 +212,10 @@ export const createClient = (
   const getUser = () =>
     channelInfo
       ? {
-          id: channelInfo.id,
-          username: channelInfo.slug,
-          tag: channelInfo.user.username,
-        }
+        id: channelInfo.id,
+        username: channelInfo.slug,
+        tag: channelInfo.user.username,
+      }
       : null;
 
   const vod = async (video_id: string) => {
@@ -241,6 +242,106 @@ export const createClient = (
       channel: videoInfo.livestream.channel,
     };
   };
+
+  const getLiveData = async (): Promise<VideosData> => {
+    if (!channelInfo) {
+      throw new Error("Channel info not available");
+    }
+    if (!clientCookies) {
+      throw new Error("Cookies missing");
+    }
+    if (!clientBearerToken) {
+      throw new Error("Bearer token missing");
+    }
+    if (!clientToken) {
+      throw new Error("XSRF token missing");
+    }
+    let channel = await fetch(
+      `https://kick.com/api/v2/channels/${channelName}/videos`,
+      {
+        headers: {
+          accept: "application/json",
+          "accept-language": "en-US,en;q=0.9",
+          authorization: `Bearer ${clientBearerToken}`,
+          "x-CSRF-token": clientToken,
+          "cache-control": "max-age=0",
+          cluster: "v2",
+          "content-type": "application/json",
+          priority: "u=1, i",
+          "sec-ch-ua": '"Not A(Brand";v="8", "Chromium";v="132"',
+          "sec-ch-ua-arch": '"arm"',
+          "sec-ch-ua-bitness": '"64"',
+          "sec-ch-ua-full-version": '"132.0.6834.111"',
+          "sec-ch-ua-full-version-list":
+            '"Not A(Brand";v="8.0.0.0", "Chromium";v="132.0.6834.111"',
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-model": '""',
+          "sec-ch-ua-platform": '"macOS"',
+          "sec-ch-ua-platform-version": '"15.0.1"',
+          "sec-fetch-dest": "empty",
+          "sec-fetch-mode": "cors",
+          "sec-fetch-site": "same-origin",
+          cookie: clientCookies,
+          Referer: `https://kick.com/${channelInfo.slug}`,
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+        },
+        method: "GET",
+      },
+    );
+    return (await channel.json()).find((video: VideosData) => video.is_live);
+  }
+
+  const getCurrentViewers = async (): Promise<number> => {
+    if (!channelInfo) {
+      throw new Error("Channel info not available");
+    }
+    if (!clientCookies) {
+      throw new Error("Cookies missing");
+    }
+    if (!clientBearerToken) {
+      throw new Error("Bearer token missing");
+    }
+    if (!clientToken) {
+      throw new Error("XSRF token missing");
+    }
+    let liveData = await getLiveData();
+    if (!liveData) {
+      return 0;
+    }
+    let channel = await fetch(
+      `https://kick.com/current-viewers?ids[]=${liveData.id}`,
+      {
+        headers: {
+          accept: "application/json",
+          "accept-language": "en-US,en;q=0.9",
+          authorization: `Bearer ${clientBearerToken}`,
+          "x-CSRF-token": clientToken,
+          "cache-control": "max-age=0",
+          cluster: "v2",
+          "content-type": "application/json",
+          priority: "u=1, i",
+          "sec-ch-ua": '"Not A(Brand";v="8", "Chromium";v="132"',
+          "sec-ch-ua-arch": '"arm"',
+          "sec-ch-ua-bitness": '"64"',
+          "sec-ch-ua-full-version": '"132.0.6834.111"',
+          "sec-ch-ua-full-version-list":
+            '"Not A(Brand";v="8.0.0.0", "Chromium";v="132.0.6834.111"',
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-model": '""',
+          "sec-ch-ua-platform": '"macOS"',
+          "sec-ch-ua-platform-version": '"15.0.1"',
+          "sec-fetch-dest": "empty",
+          "sec-fetch-mode": "cors",
+          "sec-fetch-site": "same-origin",
+          cookie: clientCookies,
+          Referer: `https://kick.com/${channelInfo.slug}`,
+          "Referrer-Policy": "strict-origin-when-cross-origin",
+        },
+        method: "GET",
+      },
+    );
+    return (((await channel.json())?.[0]) as CurrentViewers).viewers || 0;
+  }
 
   const sendMessage = async (messageContent: string) => {
     if (!channelInfo) {
@@ -333,10 +434,10 @@ export const createClient = (
       const data = permanent
         ? { banned_username: targetUser, permanent: true }
         : {
-            banned_username: targetUser,
-            duration: durationInMinutes,
-            permanent: false,
-          };
+          banned_username: targetUser,
+          duration: durationInMinutes,
+          permanent: false,
+        };
 
       const result = await makeRequest<{ success: boolean }>(
         "post",
@@ -569,5 +670,7 @@ export const createClient = (
     slowMode,
     getPoll,
     getLeaderboards,
+    getLiveData,
+    getCurrentViewers
   };
 };

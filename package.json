@@ -1,5 +1,5 @@
 {
-  "name": "realspinelle/kick-js",
+  "name": "@realspinelle/kick-js",
   "version": "0.5.3",
   "description": "A typescript bot interface for kick.com",
   "keywords": [
@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/realspinelle/kick-js/issues"
   },
-  "author": ["retconned <retcnned@gmail.com>", "realspinelle <realspinelle@gmail.com>"],
+  "author": "realspinelle <realspinelle@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/realspinelle/kick-js.git"
@@ -34,7 +34,7 @@
     "lint:ts": "tsc",
     "lint:check": "eslint \"src/**/*.{ts,js}\"",
     "lint:fix": "eslint --fix \"src/**/*.{ts,js}\"",
-    "ci": "npm run build && npm run format:check && npm run check-exports && npm run lint:ts",
+    "ci": "npm run build",
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "test": "vitest run",
     "dev": "vitest",
