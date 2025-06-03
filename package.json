@@ -1,5 +1,5 @@
 {
-  "name": "@retconned/kick-js",
+  "name": "realspinelle/kick-js",
   "version": "0.5.3",
   "description": "A typescript bot interface for kick.com",
   "keywords": [
@@ -12,14 +12,14 @@
     "Kick Api Wrapper",
     "Kick library"
   ],
-  "homepage": "https://github.com/retconned/kick-js",
+  "homepage": "https://github.com/realspinelle/kick-js",
   "bugs": {
-    "url": "https://github.com/retconned/kick-js/issues"
+    "url": "https://github.com/realspinelle/kick-js/issues"
   },
-  "author": "retconned <retcnned@gmail.com>",
+  "author": ["retconned <retcnned@gmail.com>", "realspinelle <realspinelle@gmail.com>"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/retconned/kick-js.git"
+    "url": "git+https://github.com/realspinelle/kick-js.git"
   },
   "files": [
     "dist"
