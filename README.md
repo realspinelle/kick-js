@@ -2,6 +2,10 @@
 ![License](https://img.shields.io/npm/l/@retconned/kick-js?label=License)
 
 ❇️ **@retconned/kick-js**
+❇️ **realspinelle/kick-js**
+
+## **Why a fork**
+The main repo is dead since 6 month and i need to use this package
 
 ## **What is kick-js**
 
